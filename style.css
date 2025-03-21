@@ -1,10 +1,15 @@
 :root{
     --primary-color: white;
+    --secondary-color: #efefef;
 }
 
 *{
     padding: 0;
     margin: 0;
+}
+
+body{
+    background-color: var(--secondary-color);
 }
 
 .main{
@@ -25,22 +30,280 @@
     height: auto;
 }
 
-.btn-box{
+.tool-options{
     background-color: var(--primary-color);
-    border: 2px solid gray;
+    border: 2px solid var(--secondary-color);
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); 
     padding: 20px;
     margin: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.shape-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin: 5px;
+}
+
+.wrapper img {
+    width: 24px; 
+    height: 24px;
+    background-color: var(--primary-color);
+    border: 2px solid var(--secondary-color);
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#eraser-toggle {
+    display: none; 
+}
+
+.tool-options button{
+    background-color: var(--primary-color);
+    border: 2px solid var(--secondary-color);
+    padding: 5px;
+    margin: 6px;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tool-options button.active{
+    background-color: var(--secondary-color);
+}
+
+.tool-options button img {
+    width: 25px; 
+    height: 25px;
+}
+
+#color-picker{
+    width: 40px;
+    height: 40px;
+    border: dashed;
+    cursor: pointer;
+}
+
+input[type = "range"]{
+    width: 100px;
+    margin: 10px 0;
+}
+
+.btn{
+    background-color: var(--primary-color);
+    border: 2px solid var(--secondary-color);
+    padding: 20px;
+    margin: 12px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+.save-btn {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    gap: 5px; 
+}
+
+.save-btn img {
+    width: 24px; 
+    height: 24px;
 }
 
 #drawingboard{
     width: 80vw;
-    height: 60vh;
-    border: 2px solid gray;
+    height: 70vh;
 }
 
 #canvas{
+    border: 2px solid var(--secondary-color);
+    border-radius: 20px;
     background-color: var(--primary-color);
     height: 100%;
     width: 100%;
     display: block;
+}
+
+@media screen and (max-width: 1060px) {
+    .main {
+        flex-direction: row;  
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .options {
+        display: grid;
+        gap: 10px;
+        width: 30%;
+        padding: 10px;
+    }
+
+    .tool-options {
+        width: 90%;
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .tool-options button {
+        padding: 6px;
+        font-size: 0.9rem;
+    }
+
+    .tool-options button img {
+        width: 22px; 
+        height: 22px;
+    }
+
+    #drawingboard {
+        width: 65vw;
+        height: 90vh;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .main {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .options {
+        display: grid;
+        gap: 8px;
+        width: 35%;
+        padding: 8px;
+    }
+
+    .tool-options {
+        width: 90%;
+        padding: 6px;
+        font-size: 0.8rem;
+    }
+
+    .tool-options button {
+        padding: 5px;
+        font-size: 0.8rem;
+    }
+
+    .tool-options button img {
+        width: 18px; 
+        height: 18px;
+    }
+
+    #drawingboard {
+        width: 60vw; 
+        height: 85vh;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 8px;
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .main {
+        flex-direction: row; 
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 5px;
+    }
+
+    .options {
+        display: grid;
+        gap: 4px;
+        width: 40%;
+        padding: 6px;
+    }
+
+    .tool-options {
+        width: 100%;
+        padding: 3px;
+        font-size: 0.7rem;
+    }
+
+    .tool-options button {
+        padding: 3px;
+        font-size: 0.7rem;
+    }
+
+    .tool-options button img {
+        width: 15px; 
+        height: 15px;
+    }
+
+    #drawingboard {
+        width: 55vw; 
+        height: 80vh;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 5px;
+        font-size: 0.7rem;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .main {
+        flex-direction: row; 
+        align-items: center;
+        gap: 5px;
+    }
+
+    .options {
+        display: grid;
+        justify-content: center;
+        gap: 2px;
+        width: 90%;
+        padding: 2px;
+    }
+
+    .tool-options {
+        width: auto;
+        padding: 2px;
+        font-size: 0.5rem;
+    }
+
+    .tool-options button {
+        padding: 2px;
+        font-size: 0.5rem;
+    }
+
+    .tool-options button img {
+        width: 10px; 
+        height: 10px;
+    }
+
+    #drawingboard {
+        width: 85vw; 
+        height: 55vh;
+    }
+
+    .btn {
+        padding: 3px;
+        font-size: 0.5rem;
+    }
 }
