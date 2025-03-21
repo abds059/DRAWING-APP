@@ -9,29 +9,63 @@
 <body>
     <div class="main">
         <div class="options">
-            <div class="btn-box">
-                <button class="btn"></button>
-            </div>
-            <div class="btn-box">
-                <button class="btn"></button>
-            </div>
-            <div class="btn-box">
-                <button class="btn"></button>
-            </div>
-            <div class="btn-box">
-                <button class="btn"></button>
-            </div>
-            <div class="btn-box">
-                <button class="btn"></button>
-            </div>
-            <div class="btn-box">
-                <button class="btn"></button>
-            </div>
-            <div class="btn-box">
-                <button class="btn"></button>
-            </div>
-        
+            <div class="tool-options">
+                <input type="range" id="eraser-size" min="5" max="30" value="10">
+                
+                <div class="wrapper">
+                    <input type="checkbox" id="eraser-toggle">
+                    <label for="eraser-toggle">
+                        <img src="/Assets/eraser.png" alt="Eraser Icon">
+                        <span>Eraser</span>
+                    </label> 
+                </div>
         </div>
+            
+
+            <div class="tool-options">
+                <input type="color" id="color-picker">
+                <div class="wrapper"> 
+                    <input type="checkbox" id="shape-fill">
+                    <label for="shape-fill">Shape fill</label>
+                </div>
+            </div>
+
+            <div class="tool-options">
+                <div class="shape-container">
+                    
+                <button class="shape-btn" id="brush">
+                    <img src="/Assets/paintbrush.png" alt="paintbrush">
+                </button>
+                <button class="shape-btn" id="circle">
+                    <img src="/Assets/oval.png" alt="circle">
+                </button>
+                <button class="shape-btn" id="rectangle">
+                    <img src="/Assets/square.png" alt="rectangle">
+                </button>
+                </div>
+                <label>Shapes</label>
+            </div>
+
+            <div class="tool-options">
+                <input type="color" id="color-picker">
+                <div class="wrapper">    
+                    <label for="color-picker">Color</label>
+                </div>
+            </div>
+
+            <div class="tool-options">
+                <input type="range" id="size-slider" min="1" max="20">
+                <label for="size-slider">Size</label>
+            </div>
+
+    
+            <button class="clear-board btn">Clear Board</button>
+            <button class="save-btn btn">
+                <img src="/Assets/download (1).png" alt="Save Icon">
+                <span>Save</span>
+            </button>
+        </div>
+
         <div id="drawingboard">
             <canvas id="canvas"></canvas>
         </div>
