@@ -17,34 +17,85 @@ let isDrawing = false;
 let isErasing = false;
 let isShapeFilled = false;
 let brushSize = 5;
-let eraserSizeValue = 5; 
+let eraserSizeValue = 5;
 let brushColor = "#000000";
 let selectedShape = "brush";
 let startX, startY;
 let canvasState; 
 
+// Prevent scrolling when touching the canvas
+document.body.addEventListener("touchstart", (e) => {
+    if (e.target === canvas) {
+        e.preventDefault();
+    }
+}, { passive: false });
+
+document.body.addEventListener("touchend", (e) => {
+    if (e.target === canvas) {
+        e.preventDefault();
+    }
+}, { passive: false });
+
+document.body.addEventListener("touchmove", (e) => {
+    if (e.target === canvas) {
+        e.preventDefault();
+    }
+}, { passive: false });
+
+// Set canvas size
 canvas.width = canvas.parentElement.clientWidth;
 canvas.height = canvas.parentElement.clientHeight;
 
+// Handle window resize
+window.addEventListener('resize', () => {
+    canvas.width = canvas.parentElement.clientWidth;
+    canvas.height = canvas.parentElement.clientHeight;
+});
+
+// Get coordinates helper function
+const getCoordinates = (e) => {
+    let x, y;
+    
+    if (e.type.includes('mouse')) {
+        x = e.offsetX;
+        y = e.offsetY;
+    } else {
+        // Touch event
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0] || e.changedTouches[0];
+        x = touch.clientX - rect.left;
+        y = touch.clientY - rect.top;
+    }
+    
+    return { x, y };
+};
+
+// Mouse events
 canvas.addEventListener("mousedown", (e) => {
+    const { x, y } = getCoordinates(e);
+    
     if (isErasing) {
         isDrawing = true;
     } else if (selectedShape === "brush") {
         isDrawing = true;
         ctx.beginPath();
-        ctx.moveTo(e.offsetX, e.offsetY);
+        ctx.moveTo(x, y);
     } else if (selectedShape === "circle" || selectedShape === "rectangle") {
         isDrawing = true;
-        startX = e.offsetX;
-        startY = e.offsetY;
+        startX = x;
+        startY = y;
         canvasState = ctx.getImageData(0, 0, canvas.width, canvas.height);
     }
 });
 
 canvas.addEventListener("mouseup", (e) => {
+    if (!isDrawing) return;
+    
+    const { x, y } = getCoordinates(e);
+    
     if (!isErasing) { 
         if (selectedShape === "circle") {
-            let radius = Math.sqrt(Math.pow(e.offsetX - startX, 2) + Math.pow(e.offsetY - startY, 2));
+            let radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
             ctx.beginPath();
             ctx.arc(startX, startY, radius, 0, 2 * Math.PI);
             if (isShapeFilled) {
@@ -57,8 +108,8 @@ canvas.addEventListener("mouseup", (e) => {
             }
         } 
         else if (selectedShape === "rectangle") {
-            let width = e.offsetX - startX;
-            let height = e.offsetY - startY;
+            let width = x - startX;
+            let height = y - startY;
             if (isShapeFilled) {
                 ctx.fillStyle = brushColor;
                 ctx.fillRect(startX, startY, width, height);
@@ -75,19 +126,21 @@ canvas.addEventListener("mouseup", (e) => {
 
 canvas.addEventListener("mousemove", (e) => {
     if (!isDrawing) return;
-
+    
+    const { x, y } = getCoordinates(e);
+    
     if (isErasing) {
-        ctx.clearRect(e.offsetX - eraserSizeValue / 2, e.offsetY - eraserSizeValue / 2, 
+        ctx.clearRect(x - eraserSizeValue / 2, y - eraserSizeValue / 2, 
                      eraserSizeValue, eraserSizeValue);
     } else if (selectedShape === "brush") {
         ctx.lineWidth = brushSize;
         ctx.lineCap = "round";
         ctx.strokeStyle = brushColor;
-        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.lineTo(x, y);
         ctx.stroke();
     } else if (selectedShape === "circle" && !isErasing) {
         ctx.putImageData(canvasState, 0, 0);
-        let radius = Math.sqrt(Math.pow(e.offsetX - startX, 2) + Math.pow(e.offsetY - startY, 2));
+        let radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
         ctx.beginPath();
         ctx.arc(startX, startY, radius, 0, 2 * Math.PI);
         ctx.strokeStyle = brushColor;
@@ -96,14 +149,106 @@ canvas.addEventListener("mousemove", (e) => {
     }
     else if (selectedShape === "rectangle" && !isErasing) {
         ctx.putImageData(canvasState, 0, 0); 
-        let width = e.offsetX - startX;
-        let height = e.offsetY - startY;
+        let width = x - startX;
+        let height = y - startY;
         ctx.strokeStyle = brushColor;
         ctx.lineWidth = brushSize;
         ctx.strokeRect(startX, startY, width, height);
     }
 });
 
+canvas.addEventListener("mouseout", () => {
+    isDrawing = false;
+});
+
+// Touch events
+canvas.addEventListener("touchstart", (e) => {
+    const { x, y } = getCoordinates(e);
+    
+    if (isErasing) {
+        isDrawing = true;
+    } else if (selectedShape === "brush") {
+        isDrawing = true;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+    } else if (selectedShape === "circle" || selectedShape === "rectangle") {
+        isDrawing = true;
+        startX = x;
+        startY = y;
+        canvasState = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    }
+});
+
+canvas.addEventListener("touchend", (e) => {
+    if (!isDrawing) return;
+    
+    const { x, y } = getCoordinates(e);
+    
+    if (!isErasing) { 
+        if (selectedShape === "circle") {
+            let radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
+            ctx.beginPath();
+            ctx.arc(startX, startY, radius, 0, 2 * Math.PI);
+            if (isShapeFilled) {
+                ctx.fillStyle = brushColor;
+                ctx.fill();
+            } else {
+                ctx.strokeStyle = brushColor;
+                ctx.lineWidth = brushSize;
+                ctx.stroke();
+            }
+        } 
+        else if (selectedShape === "rectangle") {
+            let width = x - startX;
+            let height = y - startY;
+            if (isShapeFilled) {
+                ctx.fillStyle = brushColor;
+                ctx.fillRect(startX, startY, width, height);
+            } else {
+                ctx.strokeStyle = brushColor;
+                ctx.lineWidth = brushSize;
+                ctx.strokeRect(startX, startY, width, height);
+            }
+        }
+    }
+
+    isDrawing = false;
+});
+
+canvas.addEventListener("touchmove", (e) => {
+    if (!isDrawing) return;
+    
+    const { x, y } = getCoordinates(e);
+    
+    if (isErasing) {
+        ctx.clearRect(x - eraserSizeValue / 2, y - eraserSizeValue / 2, 
+                     eraserSizeValue, eraserSizeValue);
+    } else if (selectedShape === "brush") {
+        ctx.lineWidth = brushSize;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = brushColor;
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    } else if (selectedShape === "circle" && !isErasing) {
+        ctx.putImageData(canvasState, 0, 0);
+        let radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
+        ctx.beginPath();
+        ctx.arc(startX, startY, radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = brushColor;
+        ctx.lineWidth = brushSize;
+        ctx.stroke();
+    }
+    else if (selectedShape === "rectangle" && !isErasing) {
+        ctx.putImageData(canvasState, 0, 0); 
+        let width = x - startX;
+        let height = y - startY;
+        ctx.strokeStyle = brushColor;
+        ctx.lineWidth = brushSize;
+        ctx.strokeRect(startX, startY, width, height);
+    }
+});
+
+// UI controls event listeners
 erasertoggle.addEventListener("change", (e) => {
     isErasing = erasertoggle.checked;
     isDrawing = false;
