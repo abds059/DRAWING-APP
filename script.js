@@ -305,7 +305,19 @@ clearboard.addEventListener("click", () => {
 
 //Save Button 
 savebtn.addEventListener("click", () => {
-    const imageURL = canvas.toDataURL("image/png");
+
+    const tempCanvas = document.createElement("canvas");
+    const tempCtx = tempCanvas.getContext("2d");
+    
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+
+    tempCtx.fillStyle = "#ffffff";
+    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+    tempCtx.drawImage(canvas, 0, 0);
+    
+    const imageURL = tempCanvas.toDataURL("image/png");
+
     const link = document.createElement("a");
     link.href = imageURL;
     link.download = "drawing.png";
