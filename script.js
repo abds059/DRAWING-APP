@@ -136,14 +136,10 @@ tooloptionsbtns.forEach((btn)=>{
 
 // Board Clear
 clearboard.addEventListener("click", ()=>{
-    let confirmclear = confirm("Are you sure you want to clear the board ?");
-    
-    if (confirmclear) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         isDrawing = false;
         isErasing = false;
         tooloptionsbtns.forEach((btn) => btn.classList.remove("active")); 
-    }
 });
 
 //Save Button 
